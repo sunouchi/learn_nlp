@@ -1,0 +1,207 @@
+150813
+入門自然言語処理を学ぶ会 - 第2回
+http://learn-nlp.connpass.com/event/18054/
+
+
+
+
+
+
+
+自己紹介
+簾内貴就（すのうちたかなり）
+フリーのデザイナー、フロントエンドエンジニア
+
+
+
+
+
+
+
+
+自然言語処理に関心を持つきっかけ
+タモリの四ヶ国語麻雀
+https://www.youtube.com/watch?v=CdyOCmr6cms
+言葉の意味をメチャクチャにしたい
+
+
+
+
+
+
+
+
+WordNetとは
+英語の概念辞書（意味辞書）である。英単語がsynsetと呼ばれる同義語のグループに分類され、簡単な定義や、他の同義語のグループとの関係が記述されている
+参照：https://ja.wikipedia.org/wiki/WordNet
+
+
+
+
+
+
+
+同義語の例：'motorcar'と'automobile'
+a. Benz is credited with the invention of the motorcar.
+b. Benz is credited with the invention of the automobile.
+
+
+
+
+
+
+
+
+nltkのWordNetの使い方
+>>> from nltk.corpus import wordnet as wn
+>>> wn.synsets('motorcar')
+[Synset('car.n.01')]
+
+>>> wn.synsets('car')
+[Synset('car.n.01'), Synset('car.n.02'), Synset('car.n.03'), Synset('car.n.04'), Synset('cable_car.n.01')]
+
+
+
+
+
+
+
+
+WordNetの階層構造
+同義語集合に対応した節点郡
+http://www.kanzaki.com/docs/sw/wn-hier.gif
+
+
+
+
+
+
+
+下位語（hyponyms）を調べる
+>>> motorcar = wn.synset('car.n.01')
+>>> motorcar.hyponyms()
+[Synset('ambulance.n.01'), Synset('beach_wagon.n.01'), Synset('bus.n.04'), Synset('cab.n.03'), Synset('compact.n.03'), Synset('convertible.n.01'), Synset('coupe.n.01'), Synset('cruiser.n.01'), Synset('electric.n.01'), Synset('gas_guzzler.n.01'), Synset('hardtop.n.01'), （以下略）
+
+
+
+
+
+
+
+
+上位語（hypernyms）を調べる
+>>> motorcar.hypernyms()
+[Synset('motor_vehicle.n.01')]
+
+
+
+
+
+
+
+
+パスってなんだ
+上位概念に至るまでの経路のこと。
+>>> paths = motorcar.hypernym_paths()
+>>> paths
+[[Synset('entity.n.01'), Synset('physical_entity.n.01'), Synset('object.n.01'), Synset('whole.n.02'), Synset('artifact.n.01'), Synset('instrumentality.n.03'), Synset('container.n.01'), Synset('wheeled_vehicle.n.01'), Synset('self-propelled_vehicle.n.01'), Synset('motor_vehicle.n.01'), （以下略）
+
+>>> len(paths)
+2
+
+
+
+
+
+
+
+
+語彙関係
+1つの同義語集合からほかの同義語集合への関係を表すもの
+
+
+
+
+
+
+
+
+メロニムとホロニム
+メロニム：ある要素からそれを含む構成要素への関係
+ホロニム：構成要素とそれを含む要素との関係
+
+
+
+
+
+
+
+
+例
+構成要素：「木/tree」
+ある要素：「幹/trunk」「枝/limb」（構成要素の部分）
+　　　　　「心材/heartwood」「辺材/sapwood」（材質的な部分）
+
+
+
+
+
+
+
+
+nltkで実行する
+>>> wn.synset('tree.n.01').part_meronyms()
+[Synset('burl.n.02'), Synset('crown.n.07'), Synset('limb.n.02'), Synset('stump.n.01'), Synset('trunk.n.01')]
+>>> wn.synset('tree.n.01').substance_meronyms()
+[Synset('heartwood.n.01'), Synset('sapwood.n.01')]
+>>> wn.synset('tree.n.01').member_holonyms()
+[Synset('forest.n.01')]
+
+
+
+
+
+
+
+
+反意語（antonyms）を取得する
+>>> wn.lemma('supply.n.02.supply').antonyms()
+[Lemma('demand.n.02.demand')]
+
+
+
+
+
+
+
+
+-----
+
+
+
+
+
+
+
+
+
+【質問】
+>>> wn.synset('car.n.01').lemma_names()
+<bound method Synset.lemma_names of Synset('car.n.01')>
+期待しているのは、
+['car', 'auto', 'automobile', 'machine', 'motorcar']
+
+
+
+
+
+
+
+-----------
+
+【メモ】
+
+・wordnetはオントロジー
+・マルコフ連鎖
+
+
