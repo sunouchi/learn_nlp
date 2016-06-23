@@ -13,7 +13,8 @@ sents = [
     '(come(Olive) | come(Tofu)) -> -happy(Irene)',
     # e. Pat didn't cough or sneeze.
     '-cough(Pat) | -sneeze(Pat)'
-    # f. If you don't come if I call. I won't come if you call.
+    # f. If you don't come if I call, I won't come if you call.
+    '(call(I) -> -come(you)) -> (call(you) -> -come(I))'
 ]
 
 
